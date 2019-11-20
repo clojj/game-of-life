@@ -8,8 +8,28 @@ val world = World(setOf(Cell(3, 1), Cell(1, 2), Cell(1, 3), Cell(2, 3)))
 
 println(world)
 
+val neighbors = { (x, y): Cell ->
+    listOf(
+        Cell(x, y + 1),
+        Cell(x, y - 1),
+        Cell(x + 1, y),
+        Cell(x - 1, y),
+        Cell(x + 1, y + 1),
+        Cell(x + 1, y - 1),
+        Cell(x - 1, y + 1),
+        Cell(x - 1, y - 1)
+    )
+}
 
-// in 4 Schritten von einer 'Methode' zur Funktion-als-Wert
+// Nachbarschaft ist symmetrisch !
+
+val neighborCounts = { world: World ->
+    world.cells.flatMap { c: Cell -> neighbors(c) }.sorted().groupBy { it }.mapValues { (_, value) -> value.count() }
+}
+
+println("neighbors ${neighborCounts(world)}")
+
+// Ausflug: in 4 Schritten von einer 'Methode' zur Funktion-als-Wert
 
 fun neighbors1(cell: Cell): List<Cell> {
     val (x, y) = cell
