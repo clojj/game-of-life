@@ -6,18 +6,17 @@ data class World(val cells: Set<Cell>)
 
 val world = World(setOf(Cell(1, 1), Cell(1, 2), Cell(1, 3)))
 println(world)
-println("generate ${generate(world, 103)}")
 
 val neighbors = { (x, y): Cell ->
     listOf(
-        Cell(x, y + 1),
-        Cell(x, y - 1),
-        Cell(x + 1, y),
-        Cell(x - 1, y),
-        Cell(x + 1, y + 1),
-        Cell(x + 1, y - 1),
-        Cell(x - 1, y + 1),
-        Cell(x - 1, y - 1)
+            Cell(x, y + 1),
+            Cell(x, y - 1),
+            Cell(x + 1, y),
+            Cell(x - 1, y),
+            Cell(x + 1, y + 1),
+            Cell(x + 1, y - 1),
+            Cell(x - 1, y + 1),
+            Cell(x - 1, y - 1)
     )
 }
 
@@ -36,75 +35,67 @@ fun nextGeneration(world: World): World {
 
 println("nextGeneration ${nextGeneration(world)}")
 
-tailrec fun generate(world: World, n: Int): World {
-    if (n == 0)
-        return world
-    else {
-        return generate(nextGeneration(world), n - 1)
-    }
+tailrec fun generate(world: World, n: Int): World =
+        if (n == 0)
+            world
+        else {
+            generate(nextGeneration(world), n - 1)
+        }
+
+println("generate ${generate(world, 103)}")
+
+val golSequence = sequence {
+    yieldAll(generateSequence(world) { world -> nextGeneration(world) })
 }
 
+println("golSequence ${golSequence.take(5).toList()}")
 
-// Ausflug: in 4 Schritten von einer 'Methode' zur Funktion-als-Wert
+/*
+[World(cells=[Cell(x=1, y=1), Cell(x=1, y=2), Cell(x=1, y=3)]),
+ World(cells=[Cell(x=0, y=2), Cell(x=1, y=2), Cell(x=2, y=2)]),
+ World(cells=[Cell(x=1, y=1), Cell(x=1, y=2), Cell(x=1, y=3)]),
+ World(cells=[Cell(x=0, y=2), Cell(x=1, y=2), Cell(x=2, y=2)]),
+ World(cells=[Cell(x=1, y=1), Cell(x=1, y=2), Cell(x=1, y=3)])]
+*/
+
+// Ausflug: in 3 Schritten von einer 'Methode' zur Funktion-als-Wert
 
 fun neighbors1(cell: Cell): List<Cell> {
     val (x, y) = cell
     return listOf(
-        Cell(x, y + 1),
-        Cell(x, y - 1),
-        Cell(x + 1, y),
-        Cell(x - 1, y),
-        Cell(x + 1, y + 1),
-        Cell(x + 1, y - 1),
-        Cell(x - 1, y + 1),
-        Cell(x - 1, y - 1)
+            Cell(x, y + 1),
+            Cell(x, y - 1),
+            Cell(x + 1, y),
+            Cell(x - 1, y),
+            Cell(x + 1, y + 1),
+            Cell(x + 1, y - 1),
+            Cell(x - 1, y + 1),
+            Cell(x - 1, y - 1)
     )
 }
-
-println(neighbors1(Cell(1, 1)))
 
 fun neighbors2(): (Cell) -> List<Cell> = { (x, y) ->
     listOf(
-        Cell(x, y + 1),
-        Cell(x, y - 1),
-        Cell(x + 1, y),
-        Cell(x - 1, y),
-        Cell(x + 1, y + 1),
-        Cell(x + 1, y - 1),
-        Cell(x - 1, y + 1),
-        Cell(x - 1, y - 1)
+            Cell(x, y + 1),
+            Cell(x, y - 1),
+            Cell(x + 1, y),
+            Cell(x - 1, y),
+            Cell(x + 1, y + 1),
+            Cell(x + 1, y - 1),
+            Cell(x - 1, y + 1),
+            Cell(x - 1, y - 1)
     )
 }
-
-println(neighbors2()(Cell(1, 1)))
 
 val neighbors3: (Cell) -> List<Cell> = { (x, y) ->
     listOf(
-        Cell(x, y + 1),
-        Cell(x, y - 1),
-        Cell(x + 1, y),
-        Cell(x - 1, y),
-        Cell(x + 1, y + 1),
-        Cell(x + 1, y - 1),
-        Cell(x - 1, y + 1),
-        Cell(x - 1, y - 1)
+            Cell(x, y + 1),
+            Cell(x, y - 1),
+            Cell(x + 1, y),
+            Cell(x - 1, y),
+            Cell(x + 1, y + 1),
+            Cell(x + 1, y - 1),
+            Cell(x - 1, y + 1),
+            Cell(x - 1, y - 1)
     )
 }
-
-println(neighbors3(Cell(1, 1)))
-
-val neighbors4 = { (x, y): Cell ->
-    listOf(
-        Cell(x, y + 1),
-        Cell(x, y - 1),
-        Cell(x + 1, y),
-        Cell(x - 1, y),
-        Cell(x + 1, y + 1),
-        Cell(x + 1, y - 1),
-        Cell(x - 1, y + 1),
-        Cell(x - 1, y - 1)
-    )
-}
-
-println(neighbors4(Cell(1, 1)))
-
